@@ -9,8 +9,7 @@ public class Square {
     }
 
     public static void printSquareArea(Square square) {
-        String text = String.format("Площадь квадрата со стороной %f равна %f", square.side, square.area());
-        System.out.println(text);
+        System.out.printf("Площадь квадрата со стороной %f равна %f", square.side, square.area());
     }
 
     public double area() {

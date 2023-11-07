@@ -17,12 +17,12 @@ public class Triangle {
         return this.side1 + this.side2 + this.side3;
     }
 
-    public double area(Triangle triangle) {
-        double halfPerimeter = triangle.perimeter() / 2;
+    public double area() {
+        double halfPerimeter = perimeter() / 2;
         return (double) Math.round(Math.sqrt(halfPerimeter
-               * (halfPerimeter - triangle.side1)
-               * (halfPerimeter - triangle.side2)
-               * (halfPerimeter - triangle.side3)) * 10) / 10;
+               * (halfPerimeter - this.side1)
+               * (halfPerimeter - this.side2)
+               * (halfPerimeter - this.side3)) * 10) / 10;
     }
 
 }

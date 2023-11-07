@@ -11,9 +11,8 @@ public class Rectangle {
     }
 
     public static void printRectangleArea(Rectangle rectangle) {
-        String text = String.format("Площадь прямоугольника со сторонами %f и %f равна %f",
+        System.out.printf("Площадь прямоугольника со сторонами %f и %f равна %f",
                rectangle.side1, rectangle.side2, rectangle.area());
-        System.out.println(text);
     }
 
     public double area() {
