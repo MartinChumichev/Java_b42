@@ -6,6 +6,9 @@ public class Square {
 
     public Square(double side) {
         this.side = side;
+        if (side < 0) {
+            throw new IllegalArgumentException("Сторона квадрата должна быть положительной");
+        }
     }
 
     public static void printSquareArea(Square square) {

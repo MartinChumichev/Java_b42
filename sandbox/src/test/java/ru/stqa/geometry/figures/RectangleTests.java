@@ -14,4 +14,14 @@ public class RectangleTests {
     void canCalculatePerimeter() {
         Assertions.assertEquals(16, new Rectangle(3, 5).perimeter());
     }
+
+    @Test
+    void cannotCreateRectangleWithNegativeSide() {
+        try {
+            new Rectangle(-5 , 2);
+            Assertions.fail();
+        } catch (IllegalArgumentException e) {
+            // ОК
+        }
+    }
 }

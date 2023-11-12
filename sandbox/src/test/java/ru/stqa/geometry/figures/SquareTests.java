@@ -14,4 +14,14 @@ public class SquareTests {
     void canCalculatePerimeter() {
         Assertions.assertEquals(20, new Square(5).perimeter());
     }
+
+    @Test
+    void cannotCreateSquareWithNegativeSide() {
+        try {
+            new Square(-5);
+            Assertions.fail();
+        } catch (IllegalArgumentException e) {
+        // ОК
+        }
+    }
 }

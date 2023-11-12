@@ -15,4 +15,24 @@ public class TriangleTests {
         Assertions.assertEquals(9, new Triangle(2, 3, 4).perimeter());
 
     }
+
+    @Test
+    void cannotCreateTriangleWithNegativeSide() {
+        try {
+            new Triangle(1, -2, 3);
+            Assertions.fail();
+        } catch (IllegalArgumentException e) {
+            //
+        }
+    }
+
+    @Test
+    void cannotCreateTriangleThatDoesNotExist() {
+        try {
+            new Triangle(1, 2, 4);
+            Assertions.fail();
+        } catch (IllegalArgumentException e) {
+            //
+        }
+    }
 }

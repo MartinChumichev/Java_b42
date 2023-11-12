@@ -1,10 +1,17 @@
-import java.io.File;
-
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hi");
+        var a = 1;
+        var b = 0;
+        if (b == 0) {
+            System.out.println("Делить на 0 нельзя");
+        } else {
+            int c = divide(a, b);
+            System.out.println("Привет!");
+        }
+    }
 
-        var file = new File("sandbox/build.gradle");
-        System.out.println(file.exists());
+    private static int divide(int a, int b) {
+        var c = a / b;
+        return c;
     }
 }
