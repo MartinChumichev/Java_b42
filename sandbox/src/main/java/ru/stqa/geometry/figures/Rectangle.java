@@ -26,4 +26,19 @@ public class Rectangle {
         return 2 * (this.side1 * this.side2);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rectangle rectangle = (Rectangle) o;
+
+        return (Double.compare(rectangle.side2, this.side2) == 0 && Double.compare(rectangle.side1, this.side1) == 0)
+               || (Double.compare(rectangle.side1, this.side2) == 0 && Double.compare(rectangle.side2, this.side1) == 0);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }

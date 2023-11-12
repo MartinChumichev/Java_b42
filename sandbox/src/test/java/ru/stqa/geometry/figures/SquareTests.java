@@ -24,4 +24,19 @@ public class SquareTests {
         // ОК
         }
     }
+
+    @Test
+    void testEquality() {
+        var s1 = new Square(2.0);
+        var s2 = new Square(2.0);
+        Assertions.assertEquals(s1 ,s2);
+    }
+
+    @Test
+    void testNotEquality() {
+        var s1 = new Square(1.0);
+        var s2 = new Square(2.0);
+        Assertions.assertNotEquals(s1 ,s2);
+    }
+
 }

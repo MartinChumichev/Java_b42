@@ -24,4 +24,25 @@ public class RectangleTests {
             // ОК
         }
     }
+
+    @Test
+    void testEquality() {
+        var r1 = new Rectangle(1, 2);
+        var r2 = new Rectangle(1, 2);
+        Assertions.assertEquals(r1 ,r2);
+    }
+
+    @Test
+    void testNotEquality() {
+        var r1 = new Rectangle(1, 2);
+        var r2 = new Rectangle(2, 3);
+        Assertions.assertNotEquals(r1 ,r2);
+    }
+
+    @Test
+    void testPass() {
+        var r1 = new Rectangle(1, 2);
+        var r2 = new Rectangle(2, 1);
+        Assertions.assertEquals(r1, r2);
+    }
 }

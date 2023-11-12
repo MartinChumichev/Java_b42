@@ -31,4 +31,20 @@ public class Triangle {
                * (halfPerimeter - this.side3)) * 10) / 10;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Triangle triangle = (Triangle) o;
+
+        return ((Double.compare(triangle.side3, this.side3) == 0 || Double.compare(triangle.side3, this.side2) == 0 || Double.compare(triangle.side3, this.side1) == 0)
+               && (Double.compare(triangle.side2, this.side3) == 0 || Double.compare(triangle.side2, this.side2) == 0 || Double.compare(triangle.side2, this.side1) == 0)
+               && (Double.compare(triangle.side1, this.side3) == 0 || Double.compare(triangle.side1, this.side2) == 0 || Double.compare(triangle.side1, this.side1) == 0));
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }

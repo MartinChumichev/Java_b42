@@ -23,4 +23,18 @@ public class Square {
         return this.side * 4;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Square square = (Square) o;
+
+        return Double.compare(square.side, side) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }
