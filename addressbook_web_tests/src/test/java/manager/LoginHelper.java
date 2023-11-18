@@ -6,7 +6,6 @@ public class LoginHelper extends HelperBase {
 
     public LoginHelper(ApplicationManager manager) {
         super(manager);
-
     }
 
     void login(String name, String password) {

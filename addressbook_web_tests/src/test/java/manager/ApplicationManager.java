@@ -7,10 +7,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.time.Duration;
+
 public class ApplicationManager {
     protected WebDriver driver;
     private LoginHelper session;
     private GroupHelper groups;
+    private ContactHelper contacts;
 
     public LoginHelper session() {
         if (session == null) {
@@ -26,6 +29,13 @@ public class ApplicationManager {
         return groups;
     }
 
+    public ContactHelper contacts() {
+        if (contacts == null) {
+            contacts = new ContactHelper(this);
+        }
+        return contacts;
+    }
+
     public void init(String browser) {
         if (driver == null) {
             switch (browser) {
@@ -38,6 +48,7 @@ public class ApplicationManager {
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
             driver.manage().window().maximize();
             driver.get("http://localhost/addressbook/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
             session().login("admin", "secret");
         }
     }
