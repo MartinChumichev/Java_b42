@@ -2,6 +2,9 @@ package manager;
 
 import model.ContactData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
     public ContactHelper(ApplicationManager manager) {
@@ -20,6 +23,24 @@ public class ContactHelper extends HelperBase {
         selectContact();
         submitRemoval();
         acceptWindowAlert();
+    }
+
+    public void removeAllContacts() {
+        selectAllContacts();
+        submitRemoval();
+        acceptWindowAlert();
+        goToHomePage();
+    }
+
+    private void selectAllContacts() {
+        List<WebElement> checkboxes = manager.driver.findElements(By.name("selected[]"));
+        for (WebElement checkbox : checkboxes) {
+            checkbox.click();
+        }
+    }
+
+    public int getCount() {
+        return manager.driver.findElements(By.name("selected[]")).size();
     }
 
     private void acceptWindowAlert() {
@@ -68,9 +89,4 @@ public class ContactHelper extends HelperBase {
         click(By.name("email3"));
         fillField(By.name("email3"), contact.getThirdEmail());
     }
-
-    public boolean isContactPresent() {
-        return manager.isElementPresent(By.name("selected[]"));
-    }
-
 }

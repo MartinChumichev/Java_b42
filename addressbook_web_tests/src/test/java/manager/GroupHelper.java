@@ -2,8 +2,11 @@ package manager;
 
 import model.GroupData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-public class GroupHelper extends HelperBase{
+import java.util.List;
+
+public class GroupHelper extends HelperBase {
 
     public GroupHelper(ApplicationManager manager) {
         super(manager);
@@ -26,11 +29,30 @@ public class GroupHelper extends HelperBase{
         returnToGroupsPage();
     }
 
-    public void removeGroup() {
+    public void removeGroups() {
         openGroupPage();
         selectGroup();
         submitRemovalGroup();
         returnToGroupsPage();
+    }
+
+    public void removeAllGroups() {
+        openGroupPage();
+        selectAllGroups();
+        submitRemovalGroup();
+        returnToGroupsPage();
+    }
+
+    private void selectAllGroups() {
+        List<WebElement> checkboxes = manager.driver.findElements(By.name("selected[]"));
+        for (WebElement checkbox : checkboxes) {
+            checkbox.click();
+        }
+    }
+
+    public int getCount() {
+        openGroupPage();
+        return manager.driver.findElements(By.name("selected[]")).size();
     }
 
     private void fillGroupForm(GroupData group) {
@@ -75,9 +97,5 @@ public class GroupHelper extends HelperBase{
         if (!manager.isElementPresent(By.name("new"))) {
             click(By.linkText("groups"));
         }
-    }
-
-    public boolean isGroupPresent() {
-        return manager.isElementPresent(By.name("selected[]"));
     }
 }
