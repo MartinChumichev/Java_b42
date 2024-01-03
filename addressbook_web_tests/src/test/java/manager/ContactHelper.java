@@ -12,6 +12,14 @@ public class ContactHelper extends HelperBase {
         super(manager);
     }
 
+    public void modifyContact(ContactData contact, ContactData testData) {
+        goToHomePage();
+        initContactModification(contact);
+        fillForm(testData);
+        submitContactModification();
+        goToHomePage();
+    }
+
     public void createContact(ContactData contact) {
         initContactCreation();
         fillForm(contact);
@@ -32,6 +40,14 @@ public class ContactHelper extends HelperBase {
         submitRemoval();
         acceptWindowAlert();
         goToHomePage();
+    }
+
+    private void initContactModification(ContactData contact) {
+        click(By.xpath(String.format("//input[@value='%s']/ancestor::tr/td[8]/a", contact.getId())));
+    }
+
+    private void submitContactModification() {
+        click(By.name("update"));
     }
 
     private void selectAllContacts() {
@@ -94,7 +110,7 @@ public class ContactHelper extends HelperBase {
 
     public List<ContactData> getList() {
         List<ContactData> contacts = new ArrayList<>();
-        List<WebElement> spans = manager.driver.findElements(By.xpath("//tr[@name='entry']"));
+        List<WebElement> spans = manager.driver.findElements(By.xpath("//tbody//tr[position()>1]"));
         for (var span : spans) {
             var id = span.findElement(By.name("selected[]")).getAttribute("value");
             var lastName = span.findElement(By.xpath("//td[2]")).getText();
