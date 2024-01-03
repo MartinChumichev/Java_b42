@@ -4,6 +4,7 @@ import model.ContactData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactHelper extends HelperBase {
@@ -18,11 +19,12 @@ public class ContactHelper extends HelperBase {
         goToHomePage();
     }
 
-    public void removeContact() {
+    public void removeContact(ContactData contact) {
         goToHomePage();
-        selectContact();
+        selectContact(contact);
         submitRemoval();
         acceptWindowAlert();
+        goToHomePage();
     }
 
     public void removeAllContacts() {
@@ -51,8 +53,8 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//input[@value='Delete']"));
     }
 
-    private void selectContact() {
-        click(By.name("selected[]"));
+    private void selectContact(ContactData contact) {
+        click(By.xpath(String.format("//input[@value='%s']", contact.getId())));
     }
 
     private void initContactCreation() {
@@ -88,5 +90,17 @@ public class ContactHelper extends HelperBase {
         fillField(By.name("email2"), contact.getSecondEmail());
         click(By.name("email3"));
         fillField(By.name("email3"), contact.getThirdEmail());
+    }
+
+    public List<ContactData> getList() {
+        List<ContactData> contacts = new ArrayList<>();
+        List<WebElement> spans = manager.driver.findElements(By.xpath("//tr[@name='entry']"));
+        for (var span : spans) {
+            var id = span.findElement(By.name("selected[]")).getAttribute("value");
+            var lastName = span.findElement(By.xpath("//td[2]")).getText();
+            var firstName = span.findElement(By.xpath("//td[3]")).getText();
+            contacts.add(new ContactData().contactWithNames(id, firstName, lastName));
+        }
+        return contacts;
     }
 }

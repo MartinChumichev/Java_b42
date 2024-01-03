@@ -4,6 +4,7 @@ import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupHelper extends HelperBase {
@@ -12,11 +13,11 @@ public class GroupHelper extends HelperBase {
         super(manager);
     }
 
-    public void modifyGroup(GroupData group) {
+    public void modifyGroup(GroupData group, GroupData modifiedGroup) {
         openGroupPage();
-        selectGroup();
+        selectGroup(group);
         initGroupModification();
-        fillGroupForm(group);
+        fillGroupForm(modifiedGroup);
         submitGroupModification();
         returnToGroupsPage();
     }
@@ -29,9 +30,9 @@ public class GroupHelper extends HelperBase {
         returnToGroupsPage();
     }
 
-    public void removeGroups() {
+    public void removeGroups(GroupData group) {
         openGroupPage();
-        selectGroup();
+        selectGroup(group);
         submitRemovalGroup();
         returnToGroupsPage();
     }
@@ -73,8 +74,8 @@ public class GroupHelper extends HelperBase {
 
     }
 
-    private void selectGroup() {
-        click(By.name("selected[]"));
+    private void selectGroup(GroupData group) {
+        click(By.xpath(String.format("//input[@value='%s']", group.id())));
     }
 
     private void submitGroupModification() {
@@ -97,5 +98,17 @@ public class GroupHelper extends HelperBase {
         if (!manager.isElementPresent(By.name("new"))) {
             click(By.linkText("groups"));
         }
+    }
+
+    public List<GroupData> getList() {
+        openGroupPage();
+        List<GroupData> groups = new ArrayList<>();
+        List<WebElement> spans = manager.driver.findElements(By.xpath("//span[@class='group']"));
+        for (var span : spans) {
+            var name = span.getText();
+            var id = span.findElement(By.name("selected[]")).getAttribute("value");
+            groups.add(new GroupData().withId(id).withName(name));
+        }
+        return groups;
     }
 }
