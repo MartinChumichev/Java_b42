@@ -2,58 +2,55 @@ package tests;
 
 import model.ContactData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactCreationTests extends TestBase {
 
-    @Test
-    void canCreateContact() {
+    @ParameterizedTest
+    @MethodSource("contactProvider")
+    void canCreateContact(ContactData contact) {
         int contactCount = app.contacts().getCount();
-        app.contacts().createContact(new ContactData("firstName", "middleName", "lastName",
-               "+32", "+7", "+007",
-               "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru"));
-
+        app.contacts().createContact(contact);
         int newContactCount = app.contacts().getCount();
         Assertions.assertEquals(contactCount + 1, newContactCount);
     }
 
-    @Test
-    void canCreateContactWithNames() {
+    @ParameterizedTest
+    @MethodSource("negativeContactProvider")
+    void canNotCreateContacts(ContactData contact) {
         int contactCount = app.contacts().getCount();
-        app.contacts().createContact(new ContactData().contactWithNames("firstName", "middleName", "lastName"));
-
+        app.contacts().createContact(contact);
         int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount + 1, newContactCount);
+        Assertions.assertEquals(contactCount, newContactCount);
     }
 
-    @Test
-    void canCreateContactWithPhones() {
-        int contactCount = app.contacts().getCount();
-        app.contacts().createContact(new ContactData().contactWithPhones("+32", "+7", "+007"));
-
-        int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount + 1, newContactCount);
-    }
-
-    @Test
-    void canCreateContactWithEmails() {
-        int contactCount = app.contacts().getCount();
-        app.contacts().createContact(new ContactData().contactWithEmails("firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru"));
-
-        int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount + 1, newContactCount);
-    }
-
-    @Test
-    void canCreateMultiplyContacts() {
-        int a = 5;
-        int contactCount = app.contacts().getCount();
-
-        for (int i = 0; i < a; i++) {
-            app.contacts().createContact(new ContactData().contactWithNames(randomString(5), "middleName", "lastName"));
+    public static List<ContactData> contactProvider() {
+        List<ContactData> list = new ArrayList<>();
+        for (String firstName : List.of("", "firstName")) {
+            for (String middleName : List.of("", "middleName")) {
+                for (String lastName : List.of("", "lastName")) {
+                    {
+                        list.add(new ContactData().contactWithNames(firstName, middleName, lastName));
+                    }
+                }
+            }
         }
+        for (int i = 0; i < 5; i++) {
+            list.add(new ContactData(randomString(i), randomString(i), randomString(i),
+                   generateRandomPhoneNumber(), generateRandomPhoneNumber(), generateRandomPhoneNumber(),
+                   generateRandomEmail(), generateRandomEmail(), generateRandomEmail()));
 
-        int newContactCount = app.contacts().getCount();
-        Assertions.assertEquals(contactCount + a, newContactCount);
+        }
+        return list;
+    }
+
+    public static List<ContactData> negativeContactProvider() {
+        return new ArrayList<>(List.of(
+               new ContactData().contactWithNames("firstName'", "middleName'", "lastName'")));
     }
 }
+
