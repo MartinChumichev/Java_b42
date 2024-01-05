@@ -113,8 +113,8 @@ public class ContactHelper extends HelperBase {
         List<WebElement> spans = manager.driver.findElements(By.xpath("//tbody//tr[position()>1]"));
         for (var span : spans) {
             var id = span.findElement(By.name("selected[]")).getAttribute("value");
-            var lastName = span.findElement(By.xpath("//td[2]")).getText();
-            var firstName = span.findElement(By.xpath("//td[3]")).getText();
+            var lastName = span.findElement(By.xpath(".//td[2]")).getText();
+            var firstName = span.findElement(By.xpath(".//td[3]")).getText();
             contacts.add(new ContactData().contactWithNames(id, firstName, lastName));
         }
         return contacts;
