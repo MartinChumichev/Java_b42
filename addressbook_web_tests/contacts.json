@@ -1,0 +1,49 @@
+[ {
+  "id" : "",
+  "firstName" : "",
+  "middleName" : "",
+  "lastName" : "",
+  "homePhone" : "",
+  "mobilePhone" : "",
+  "workPhone" : "",
+  "firstEmail" : "",
+  "secondEmail" : "",
+  "thirdEmail" : "",
+  "photo" : "src\\test\\resources\\images\\avatar2.png"
+}, {
+  "id" : "",
+  "firstName" : "b",
+  "middleName" : "",
+  "lastName" : "p",
+  "homePhone" : "",
+  "mobilePhone" : "",
+  "workPhone" : "",
+  "firstEmail" : "",
+  "secondEmail" : "",
+  "thirdEmail" : "",
+  "photo" : "src\\test\\resources\\images\\avatar2.png"
+}, {
+  "id" : "",
+  "firstName" : "gk",
+  "middleName" : "",
+  "lastName" : "po",
+  "homePhone" : "",
+  "mobilePhone" : "",
+  "workPhone" : "",
+  "firstEmail" : "",
+  "secondEmail" : "",
+  "thirdEmail" : "",
+  "photo" : "src\\test\\resources\\images\\avatar.png"
+}, {
+  "id" : "",
+  "firstName" : "nqg",
+  "middleName" : "",
+  "lastName" : "jlv",
+  "homePhone" : "",
+  "mobilePhone" : "",
+  "workPhone" : "",
+  "firstEmail" : "",
+  "secondEmail" : "",
+  "thirdEmail" : "",
+  "photo" : "src\\test\\resources\\images\\avatar2.png"
+} ]
