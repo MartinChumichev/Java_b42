@@ -16,11 +16,12 @@ public class ContactData {
     private final String firstEmail;
     private final String secondEmail;
     private final String thirdEmail;
+    private final String photo;
 
 
     public ContactData(String id, String firstName, String middleName, String lastName,
                        String homePhone, String mobilePhone, String workPhone,
-                       String firstEmail, String secondEmail, String thirdEmail) {
+                       String firstEmail, String secondEmail, String thirdEmail, String photo) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -33,12 +34,13 @@ public class ContactData {
         this.firstEmail = firstEmail;
         this.secondEmail = secondEmail;
         this.thirdEmail = thirdEmail;
+        this.photo = photo;
     }
 
     public ContactData() {
         this("", "", "", "",
                "", "", "",
-               "", "", "");
+               "", "", "", "");
     }
 
     public ContactData contactWithNames(String id, String firstName, String lastName) {
@@ -51,7 +53,8 @@ public class ContactData {
 
                this.firstEmail,
                this.secondEmail,
-               this.thirdEmail);
+               this.thirdEmail,
+               this.photo);
     }
 
     public ContactData contactWithPhones(String homePhone, String mobilePhone, String workPhone) {
@@ -64,12 +67,14 @@ public class ContactData {
 
                this.firstEmail,
                this.secondEmail,
-               this.thirdEmail);
+               this.thirdEmail,
+               this.photo);
     }
 
     public ContactData contactWithEmails(String firstEmail, String secondEmail, String thirdEmail) {
         return new ContactData(
-               this.id, this.firstName,
+               this.id,
+               this.firstName,
                this.middleName,
                this.lastName,
 
@@ -77,7 +82,25 @@ public class ContactData {
                this.mobilePhone,
                this.workPhone,
 
-               firstEmail, secondEmail, thirdEmail);
+               firstEmail, secondEmail, thirdEmail,
+               this.photo);
+    }
+
+    public ContactData contactWithPhoto(String photo) {
+        return new ContactData(
+               this.id,
+               this.firstName,
+               this.middleName,
+               this.lastName,
+
+               this.homePhone,
+               this.mobilePhone,
+               this.workPhone,
+
+               this.firstEmail,
+               this.secondEmail,
+               this.thirdEmail,
+               photo);
     }
 
     public String getId() {
@@ -118,6 +141,10 @@ public class ContactData {
 
     public String getThirdEmail() {
         return thirdEmail;
+    }
+
+    public String getPhoto() {
+        return photo;
     }
 
     @Override

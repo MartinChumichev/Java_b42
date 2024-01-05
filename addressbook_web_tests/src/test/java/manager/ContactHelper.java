@@ -106,6 +106,7 @@ public class ContactHelper extends HelperBase {
         fillField(By.name("email2"), contact.getSecondEmail());
         click(By.name("email3"));
         fillField(By.name("email3"), contact.getThirdEmail());
+        attach(By.name("photo"), contact.getPhoto());
     }
 
     public List<ContactData> getList() {

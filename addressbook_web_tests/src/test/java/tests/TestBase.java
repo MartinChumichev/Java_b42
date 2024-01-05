@@ -4,6 +4,8 @@ import com.github.javafaker.Faker;
 import manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class TestBase {
@@ -18,12 +20,11 @@ public class TestBase {
         app.init(System.getProperty("browser", "chrome"));
     }
 
-    public static String randomString(int a) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < a; i++) {
-            result.append((char) ('a' + new Random().nextInt(26)));
-        }
-        return result.toString();
+    public static String randomFile(String dir) {
+        var fileNames = new File(dir).list();
+        var random = new Random();
+        var index = random.nextInt(fileNames.length);
+        return Paths.get(dir, fileNames[index]).toString();
     }
 
     public static String generateRandomEmail() {

@@ -1,5 +1,6 @@
 package tests;
 
+import common.CommonFunctions;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,9 +48,9 @@ public class GroupCreationTests extends TestBase {
         }
         for (int i = 0; i < 5; i++) {
             list.add(new GroupData()
-                   .withName(randomString(i))
-                   .withHeader(randomString(i))
-                   .withFooter(randomString(i)));
+                   .withName(CommonFunctions.randomString(i))
+                   .withHeader(CommonFunctions.randomString(i))
+                   .withFooter(CommonFunctions.randomString(i)));
         }
         return list;
     }

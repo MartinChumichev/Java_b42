@@ -1,7 +1,9 @@
 package tests;
 
+import common.CommonFunctions;
 import model.ContactData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -39,6 +41,12 @@ public class ContactCreationTests extends TestBase {
         Assertions.assertEquals(oldContacts, newContacts);
     }
 
+    @Test
+    void createContactWithPhoto() {
+        ContactData contact = new ContactData().contactWithPhoto(randomFile("src/test/resources/images/"));
+        app.contacts().createContact(contact);
+    }
+
     public static List<ContactData> contactProvider() {
         List<ContactData> list = new ArrayList<>();
         for (String firstName : List.of("", "firstName")) {
@@ -49,7 +57,7 @@ public class ContactCreationTests extends TestBase {
             }
         }
         for (int i = 0; i < 5; i++) {
-            list.add(new ContactData().contactWithNames("", randomString(i), randomString(i)));
+            list.add(new ContactData().contactWithNames("", CommonFunctions.randomString(i), CommonFunctions.randomString(i)));
         }
         return list;
     }

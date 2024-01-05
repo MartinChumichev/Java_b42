@@ -15,7 +15,7 @@ public class ContactRemovalTests extends TestBase {
         if (app.contacts().getCount() == 0) {
             app.contacts().createContact(new ContactData("", "firstName", "middleName", "lastName",
                    "+32", "+7", "+007",
-                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru"));
+                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", ""));
         }
         List<ContactData> oldContacts = app.contacts().getList();
         int index = new Random().nextInt(oldContacts.size());
@@ -31,7 +31,7 @@ public class ContactRemovalTests extends TestBase {
         if (app.contacts().getCount() == 0) {
             app.contacts().createContact(new ContactData("", "firstName", "middleName", "lastName",
                    "+32", "+7", "+007",
-                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru"));
+                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", ""));
         }
 
         app.contacts().removeAllContacts();
