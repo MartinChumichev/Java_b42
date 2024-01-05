@@ -23,16 +23,9 @@ public class ContactCreationTests extends TestBase {
         newContacts.sort(compareById);
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
         int newContact = newContacts.size() - 1;
-        expectedList.add(new ContactData(newContacts.get(newContact).getId(),
+        expectedList.add(contact.contactWithNames(newContacts.get(newContact).getId(),
                newContacts.get(newContact).getFirstName(),
-               newContacts.get(newContact).getMiddleName(),
-               newContacts.get(newContact).getLastName(),
-               newContacts.get(newContact).getHomePhone(),
-               newContacts.get(newContact).getMobilePhone(),
-               newContacts.get(newContact).getWorkPhone(),
-               newContacts.get(newContact).getFirstEmail(),
-               newContacts.get(newContact).getSecondEmail(),
-               newContacts.get(newContact).getThirdEmail()));
+               newContacts.get(newContact).getLastName()));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
     }
@@ -56,10 +49,7 @@ public class ContactCreationTests extends TestBase {
             }
         }
         for (int i = 0; i < 5; i++) {
-            list.add(new ContactData("", randomString(i), randomString(i), randomString(i),
-                   generateRandomPhoneNumber(), generateRandomPhoneNumber(), generateRandomPhoneNumber(),
-                   generateRandomEmail(), generateRandomEmail(), generateRandomEmail()));
-
+            list.add(new ContactData().contactWithNames("", randomString(i), randomString(i)));
         }
         return list;
     }
