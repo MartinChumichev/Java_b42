@@ -17,11 +17,14 @@ public class ContactModificationTests extends TestBase {
         if (app.contacts().getCount() == 0) {
             app.contacts().createContact(new ContactData("", "firstName", "middleName", "lastName",
                    "+32", "+7", "+007",
-                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", ""));
+                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", "").contactWithPhoto(randomFile("src/test/resources/images/")));
         }
         List<ContactData> oldContacts = app.contacts().getList();
         int index = new Random().nextInt(oldContacts.size());
-        ContactData testData = new ContactData().contactWithNames("", CommonFunctions.randomString(5), CommonFunctions.randomString(5));
+        ContactData testData = new ContactData().contactWithNames("",
+                      CommonFunctions.randomString(5),
+                      CommonFunctions.randomString(5))
+               .contactWithPhoto(randomFile("src/test/resources/images/"));
         app.contacts().modifyContact(oldContacts.get(index), testData);
         List<ContactData> newContacts = app.contacts().getList();
         List<ContactData> expectedList = new ArrayList<>(oldContacts);

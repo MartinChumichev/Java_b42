@@ -8,12 +8,14 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.time.Duration;
+import java.util.Properties;
 
 public class ApplicationManager {
     protected WebDriver driver;
     private LoginHelper session;
     private GroupHelper groups;
     private ContactHelper contacts;
+    private Properties properties;
 
     public LoginHelper session() {
         if (session == null) {
@@ -36,7 +38,8 @@ public class ApplicationManager {
         return contacts;
     }
 
-    public void init(String browser) {
+    public void init(String browser, Properties properties) {
+        this.properties = properties;
         if (driver == null) {
             switch (browser) {
                 case "chrome" -> driver = new ChromeDriver();
@@ -47,9 +50,9 @@ public class ApplicationManager {
 
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
             driver.manage().window().maximize();
-            driver.get("http://localhost/addressbook/");
+            driver.get(properties.getProperty("web.baseURL"));
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-            session().login("admin", "secret");
+            session().login(properties.getProperty("web.username"), properties.getProperty("web.password"));
         }
     }
 

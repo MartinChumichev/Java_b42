@@ -46,10 +46,10 @@ public class Generator {
 
     private Object generate() {
         switch (type) {
-            case ("groups") -> {
+            case "groups" -> {
                 return generateGroups();
             }
-            case ("contacts") -> {
+            case "contacts" -> {
                 return generateContacts();
             }
             default -> throw new IllegalArgumentException("Неизвестный тип данных " + type);
@@ -81,16 +81,16 @@ public class Generator {
 
     private void save(Object data) throws IOException {
         switch (format) {
-            case ("json") -> {
+            case "json" -> {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
                 mapper.writeValue(new File(output), data);
             }
-            case ("yaml") -> {
+            case "yaml" -> {
                 ObjectMapper mapper = new YAMLMapper();
                 mapper.writeValue(new File(output), data);
             }
-            case ("xml") -> {
+            case "xml" -> {
                 ObjectMapper mapper = new XmlMapper();
                 mapper.writeValue(new File(output), data);
             }
