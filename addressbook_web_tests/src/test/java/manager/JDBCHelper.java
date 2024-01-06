@@ -39,13 +39,26 @@ public class JDBCHelper extends HelperBase {
              var result = statement.executeQuery("SELECT id, lastname, firstname FROM addressbook")) {
             while (result.next()) {
                 contacts.add(new ContactData()
-                              .contactWithNames(result.getString("id"),
-                                     result.getString("firstname"),
-                                     result.getString("lastname")));
+                       .contactWithNames(result.getString("id"),
+                              result.getString("firstname"),
+                              result.getString("lastname")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return contacts;
+    }
+
+    public void checkConsistency() {
+        try (var connection = DriverManager.getConnection("jdbc:mysql://localhost/addressbook", "root", "");
+             var statement = connection.createStatement();
+             var result = statement.executeQuery(
+                    "SELECT * FROM address_in_groups ag LEFT JOIN addressbook ab ON ab.id = ag.id WHERE ab.id IS NULL")) {
+            if (result.next()) {
+              throw new IllegalStateException("DB is corrupted");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -17,12 +17,19 @@ public class ApplicationManager {
     private ContactHelper contacts;
     private Properties properties;
     private JDBCHelper jdbc;
+    private HibernateHelper hbm;
 
     public LoginHelper session() {
         if (session == null) {
             session = new LoginHelper(this);
         }
         return session;
+    }
+    public HibernateHelper hbm() {
+        if (hbm == null) {
+            hbm = new HibernateHelper(this);
+        }
+        return hbm;
     }
 
     public GroupHelper groups() {

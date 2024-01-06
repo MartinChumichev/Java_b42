@@ -18,10 +18,10 @@ public class GroupCreationTests extends TestBase {
 
     @ParameterizedTest
     @MethodSource("singleRandomGroup")
-    void carCreateGroup(GroupData group) {
-        List<GroupData> oldGroups = app.jdbc().getGroupList();
-        app.groups().createGroup(group);
-        List<GroupData> newGroups = app.jdbc().getGroupList();
+    void canCreateGroup(GroupData group) {
+        List<GroupData> oldGroups = app.hbm().getGroupList();
+        app.hbm().createGroup(group);
+        List<GroupData> newGroups = app.hbm().getGroupList();
         Comparator<GroupData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
@@ -36,9 +36,9 @@ public class GroupCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("negativeGroupProvider")
     void carNotCreateGroups(GroupData group) {
-        List<GroupData> oldGroups = app.groups().getList();
+        List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
-        List<GroupData> newGroups = app.groups().getList();
+        List<GroupData> newGroups = app.hbm().getGroupList();
         Assertions.assertEquals(oldGroups, newGroups);
     }
 
