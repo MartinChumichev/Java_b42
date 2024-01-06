@@ -45,8 +45,20 @@ public class ContactHelper extends HelperBase {
         goToHomePage();
     }
 
-    private void selectGroup(GroupData group) {
-        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    public void addContactInGroup(ContactData contact, GroupData group) {
+        goToHomePage();
+        selectContact(contact);
+        selectGroupToAdd(group);
+        submitGroupAddingToContact();
+    }
+
+    public void removeContactFromGroup(ContactData contact, GroupData group) {
+        goToHomePage();
+        selectGroupFromMainPage(group);
+        selectContact(contact);
+        removeGroupContact();
+        goToHomePage();
+        selectAllContactsFromDropList();
     }
 
     public void removeContact(ContactData contact) {
@@ -64,12 +76,36 @@ public class ContactHelper extends HelperBase {
         goToHomePage();
     }
 
+    private void selectAllContactsFromDropList() {
+        new Select(manager.driver.findElement(By.name("group"))).selectByVisibleText("[all]");
+    }
+
+    private void removeGroupContact() {
+        click(By.name("remove"));
+    }
+
+    private void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    }
+
+    private void selectGroupFromMainPage(GroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+    }
+
+    private void selectGroupToAdd(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+    }
+
     private void initContactModification(ContactData contact) {
         click(By.xpath(String.format("//input[@value='%s']/ancestor::tr/td[8]/a", contact.getId())));
     }
 
     private void submitContactModification() {
         click(By.name("update"));
+    }
+
+    private void submitGroupAddingToContact() {
+        click(By.name("add"));
     }
 
     private void selectAllContacts() {
