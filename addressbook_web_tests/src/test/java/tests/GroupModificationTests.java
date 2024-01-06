@@ -16,11 +16,11 @@ public class GroupModificationTests extends TestBase {
         if (app.groups().getCount() == 0) {
             app.groups().createGroup(new GroupData("", "name", "header", "footer"));
         }
-        List<GroupData> oldGroups = app.groups().getList();
+        List<GroupData> oldGroups = app.jdbc().getGroupList();
         int index = new Random().nextInt(oldGroups.size());
         GroupData testData = new GroupData().withName("modify_name");
         app.groups().modifyGroup(oldGroups.get(index), testData);
-        List<GroupData> newGroups = app.groups().getList();
+        List<GroupData> newGroups = app.jdbc().getGroupList();
         List<GroupData> expectedList = new ArrayList<>(oldGroups);
         expectedList.set(index, testData.withId(oldGroups.get(index).id()));
         Comparator<GroupData> compareById = (o1, o2) -> {

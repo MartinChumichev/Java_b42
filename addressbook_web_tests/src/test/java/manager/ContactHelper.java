@@ -20,6 +20,14 @@ public class ContactHelper extends HelperBase {
         goToHomePage();
     }
 
+    public void createContactWithPhoto(ContactData contact) {
+        initContactCreation();
+        fillForm(contact);
+        attachPhoto(contact);
+        submitContactCreation();
+        goToHomePage();
+    }
+
     public void createContact(ContactData contact) {
         initContactCreation();
         fillForm(contact);
@@ -85,6 +93,10 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("home"));
     }
 
+    private void attachPhoto(ContactData contact) {
+        attach(By.name("photo"), contact.getPhoto());
+    }
+
     private void fillForm(ContactData contact) {
         click(By.name("firstname"));
         fillField(By.name("firstname"), contact.getFirstName());
@@ -106,7 +118,6 @@ public class ContactHelper extends HelperBase {
         fillField(By.name("email2"), contact.getSecondEmail());
         click(By.name("email3"));
         fillField(By.name("email3"), contact.getThirdEmail());
-        attach(By.name("photo"), contact.getPhoto());
     }
 
     public List<ContactData> getList() {

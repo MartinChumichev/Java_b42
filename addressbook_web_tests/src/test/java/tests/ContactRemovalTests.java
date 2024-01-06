@@ -17,10 +17,10 @@ public class ContactRemovalTests extends TestBase {
                    "+32", "+7", "+007",
                    "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", ""));
         }
-        List<ContactData> oldContacts = app.contacts().getList();
+        List<ContactData> oldContacts = app.jdbc().getContactList();
         int index = new Random().nextInt(oldContacts.size());
         app.contacts().removeContact(oldContacts.get(index));
-        List<ContactData> newContacts = app.contacts().getList();
+        List<ContactData> newContacts = app.jdbc().getContactList();
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
         expectedList.remove(index);
         Assertions.assertEquals(newContacts, expectedList);
@@ -35,6 +35,6 @@ public class ContactRemovalTests extends TestBase {
         }
 
         app.contacts().removeAllContacts();
-        Assertions.assertEquals(0, app.contacts().getCount());
+        Assertions.assertEquals(0, app.jdbc().getContactList().size());
     }
 }
