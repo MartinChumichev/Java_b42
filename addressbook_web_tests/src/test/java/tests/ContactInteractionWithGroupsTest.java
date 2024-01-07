@@ -32,10 +32,10 @@ public class ContactInteractionWithGroupsTest extends TestBase {
 
         List<ContactData> newRelated = app.hbm().getContactsInGroup(groupToAdd);
         List<ContactData> expectedList = new ArrayList<>(oldRelated);
-        int newContact = newRelated.size() - 1;
-        expectedList.add(contactToAdd.contactWithNames(newRelated.get(newContact).getId(),
-               newRelated.get(newContact).getFirstName(),
-               newRelated.get(newContact).getLastName()));
+        expectedList.add(contactToAdd.contactWithNames(
+               contactToAdd.getId(),
+               contactToAdd.getFirstName(),
+               contactToAdd.getLastName()));
         Assertions.assertEquals(newRelated, expectedList);
     }
 
