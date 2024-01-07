@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 public class CommonFunctions {
     public static String randomString(int a) {
         Supplier<Integer> randomInt = () -> new Random().nextInt(26);
-        var result = Stream.generate(randomInt)
+        return Stream.generate(randomInt)
                .map(i -> 'a' + i)
                .map(Character::toString)
+               .limit(a)
                .collect(Collectors.joining());
-        return result;
     }
 }

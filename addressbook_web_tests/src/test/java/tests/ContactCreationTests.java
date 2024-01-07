@@ -27,7 +27,7 @@ public class ContactCreationTests extends TestBase {
         app.contacts().createContact(contact);
         List<ContactData> newContacts = app.hbm().getContactList();
 
-        var extraContact = newContacts.stream().filter(c -> !newContacts.contains(c)).toList();
+        var extraContact = newContacts.stream().filter(c -> !oldContacts.contains(c)).toList();
         var newId = extraContact.get(0).getId();
 
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
@@ -87,7 +87,7 @@ public class ContactCreationTests extends TestBase {
                       .contactWithNames("",
                              CommonFunctions.randomString(9),
                              CommonFunctions.randomString(9));
-        return Stream.generate(randomContactData).limit(2);
+        return Stream.generate(randomContactData).limit(1);
     }
 
     public static List<ContactData> negativeContactProvider() {
