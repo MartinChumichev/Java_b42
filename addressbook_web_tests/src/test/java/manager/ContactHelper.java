@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ContactHelper extends HelperBase {
     public ContactHelper(ApplicationManager manager) {
@@ -180,5 +182,53 @@ public class ContactHelper extends HelperBase {
             contacts.add(new ContactData().contactWithNames(id, firstName, lastName));
         }
         return contacts;
+    }
+
+    public String getPhonesFromMainPage(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+               String.format("//input[@id='%s']/../../td[6]", contact.getId()))).getText();
+    }
+
+    public String getEmailsFromMainPage(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+               String.format("//input[@id='%s']/../../td[5]", contact.getId()))).getText();
+    }
+
+    public String getAddressFromMainPage(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+               String.format("//input[@id='%s']/../../td[4]", contact.getId()))).getText();
+    }
+
+    public ContactData infoFromEditForm(ContactData contact) {
+        editContactById(Integer.parseInt(contact.getId()));
+        String email = manager.driver.findElement(By.name("email")).getAttribute("value");
+        String email2 = manager.driver.findElement(By.name("email2")).getAttribute("value");
+        String email3 = manager.driver.findElement(By.name("email3")).getAttribute("value");
+        String homeNumber = manager.driver.findElement(By.name("home")).getAttribute("value");
+        String mobileNumber = manager.driver.findElement(By.name("mobile")).getAttribute("value");
+        String workNumber = manager.driver.findElement(By.name("work")).getAttribute("value");
+        String secondaryNumber = manager.driver.findElement(By.name("phone2")).getAttribute("value");
+        String address = manager.driver.findElement(By.name("address")).getAttribute("value");
+        manager.driver.navigate().back();
+        return new ContactData()
+               .contactWithEmails(email, email2, email3)
+               .contactWithPhones(homeNumber, mobileNumber, workNumber, secondaryNumber)
+               .contactWithAddress(address);
+    }
+
+    private void editContactById(int id) {
+        manager.driver.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
+    }
+
+    public String getAllPhones(ContactData contact) {
+        return Stream.of(contact.getHomePhone(), contact.getMobilePhone(), contact.getWorkPhone(), contact.getSecondaryPhone())
+               .filter(s -> s != null && !s.equals(""))
+               .collect(Collectors.joining("\n"));
+    }
+
+    public String getAllEmails(ContactData contact) {
+        return Stream.of(contact.getFirstEmail(), contact.getSecondEmail(), contact.getThirdEmail())
+               .filter(s -> s != null && !s.equals(""))
+               .collect(Collectors.joining("\n"));
     }
 }
