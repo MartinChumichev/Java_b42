@@ -27,10 +27,10 @@ public class ContactCreationTests extends TestBase {
         };
         newContacts.sort(compareById);
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
-        int newContact = newContacts.size() - 1;
-        expectedList.add(contact.contactWithNames(newContacts.get(newContact).getId(),
-               newContacts.get(newContact).getFirstName(),
-               newContacts.get(newContact).getLastName()));
+        expectedList.add(contact.contactWithNames(
+               newContacts.get(newContacts.size() - 1).getId(),
+               contact.getFirstName(),
+               contact.getLastName()));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
     }
