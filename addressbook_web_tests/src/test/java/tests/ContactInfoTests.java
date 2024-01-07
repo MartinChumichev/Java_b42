@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,12 +38,10 @@ public class ContactInfoTests extends TestBase {
             app.hbm().createContact(new ContactData().contactWithPhones("123", "456", "789", "0951"));
         }
         List<ContactData> contacts = app.hbm().getContactList();
-        ContactData contact = contacts.get(0);
-        String phones = app.contacts().getPhonesFromMainPage(contact);
-
-        String expected = app.contacts().getAllPhones(contact);
-
-        Assertions.assertEquals(expected, phones);
+        var expected = contacts.stream().collect(Collectors.toMap(ContactData::getId, contact ->
+               app.contacts().getAllPhones(contact)));
+        Map<String, String> allPhones = app.contacts().getAllPhones();
+        Assertions.assertEquals(expected, allPhones);
     }
 
     @Test

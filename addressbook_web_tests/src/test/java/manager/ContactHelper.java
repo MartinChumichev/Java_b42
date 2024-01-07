@@ -7,7 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -230,5 +232,16 @@ public class ContactHelper extends HelperBase {
         return Stream.of(contact.getFirstEmail(), contact.getSecondEmail(), contact.getThirdEmail())
                .filter(s -> s != null && !s.equals(""))
                .collect(Collectors.joining("\n"));
+    }
+
+    public Map<String, String> getAllPhones() {
+        HashMap<String, String> result = new HashMap<>();
+        List<WebElement> rows = manager.driver.findElements(By.name("entry"));
+        for (WebElement row : rows) {
+            String id = row.findElement(By.tagName("input")).getAttribute("value");
+            String phones = row.findElements(By.tagName("td")).get(5).getText();
+            result.put(id, phones);
+        }
+        return result;
     }
 }
