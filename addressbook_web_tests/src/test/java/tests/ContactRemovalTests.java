@@ -12,15 +12,13 @@ public class ContactRemovalTests extends TestBase {
 
     @Test
     void canRemovalContact() {
-        if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "firstName", "middleName", "lastName",
-                   "+32", "+7", "+007",
-                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", ""));
+        if (app.hbm().getContactCount() == 0) {
+            app.hbm().createContact(new ContactData().contactWithNames("", "firstName", "lastName"));
         }
-        List<ContactData> oldContacts = app.contacts().getList();
+        List<ContactData> oldContacts = app.hbm().getContactList();
         int index = new Random().nextInt(oldContacts.size());
         app.contacts().removeContact(oldContacts.get(index));
-        List<ContactData> newContacts = app.contacts().getList();
+        List<ContactData> newContacts = app.hbm().getContactList();
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
         expectedList.remove(index);
         Assertions.assertEquals(newContacts, expectedList);
@@ -28,13 +26,10 @@ public class ContactRemovalTests extends TestBase {
 
     @Test
     void canRemoveAllContacts() {
-        if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "firstName", "middleName", "lastName",
-                   "+32", "+7", "+007",
-                   "firstEmail@ya.ru", "secondEmail@ya.ru", "thirdEmail@ya.ru", ""));
+        if (app.hbm().getContactCount() == 0) {
+            app.hbm().createContact(new ContactData().contactWithNames("", "firstName", "lastName"));
         }
-
         app.contacts().removeAllContacts();
-        Assertions.assertEquals(0, app.contacts().getCount());
+        Assertions.assertEquals(0, app.hbm().getContactList().size());
     }
 }

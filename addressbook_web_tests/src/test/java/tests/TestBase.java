@@ -2,6 +2,7 @@ package tests;
 
 import com.github.javafaker.Faker;
 import manager.ApplicationManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
@@ -23,6 +24,11 @@ public class TestBase {
             app = new ApplicationManager();
         }
         app.init(System.getProperty("browser", "chrome"), properties);
+    }
+
+    @AfterEach
+    void checkDataBaseConsistency() {
+        app.jdbc().checkConsistency();
     }
 
     public static String randomFile(String dir) {

@@ -16,12 +16,20 @@ public class ApplicationManager {
     private GroupHelper groups;
     private ContactHelper contacts;
     private Properties properties;
+    private JDBCHelper jdbc;
+    private HibernateHelper hbm;
 
     public LoginHelper session() {
         if (session == null) {
             session = new LoginHelper(this);
         }
         return session;
+    }
+    public HibernateHelper hbm() {
+        if (hbm == null) {
+            hbm = new HibernateHelper(this);
+        }
+        return hbm;
     }
 
     public GroupHelper groups() {
@@ -36,6 +44,13 @@ public class ApplicationManager {
             contacts = new ContactHelper(this);
         }
         return contacts;
+    }
+
+    public JDBCHelper jdbc() {
+        if (jdbc == null) {
+            jdbc = new JDBCHelper(this);
+        }
+        return jdbc;
     }
 
     public void init(String browser, Properties properties) {

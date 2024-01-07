@@ -1,8 +1,10 @@
 package manager;
 
 import model.ContactData;
+import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +22,43 @@ public class ContactHelper extends HelperBase {
         goToHomePage();
     }
 
+    public void createContactWithPhoto(ContactData contact) {
+        initContactCreation();
+        fillForm(contact);
+        attachPhoto(contact);
+        submitContactCreation();
+        goToHomePage();
+    }
+
     public void createContact(ContactData contact) {
         initContactCreation();
         fillForm(contact);
         submitContactCreation();
         goToHomePage();
+    }
+
+    public void createContact(ContactData contact, GroupData group) {
+        initContactCreation();
+        fillForm(contact);
+        selectGroup(group);
+        submitContactCreation();
+        goToHomePage();
+    }
+
+    public void addContactInGroup(ContactData contact, GroupData group) {
+        goToHomePage();
+        selectContact(contact);
+        selectGroupToAdd(group);
+        submitGroupAddingToContact();
+    }
+
+    public void removeContactFromGroup(ContactData contact, GroupData group) {
+        goToHomePage();
+        selectGroupFromMainPage(group);
+        selectContact(contact);
+        removeGroupContact();
+        goToHomePage();
+        selectAllContactsFromDropList();
     }
 
     public void removeContact(ContactData contact) {
@@ -42,12 +76,36 @@ public class ContactHelper extends HelperBase {
         goToHomePage();
     }
 
+    private void selectAllContactsFromDropList() {
+        new Select(manager.driver.findElement(By.name("group"))).selectByVisibleText("[all]");
+    }
+
+    private void removeGroupContact() {
+        click(By.name("remove"));
+    }
+
+    private void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    }
+
+    private void selectGroupFromMainPage(GroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+    }
+
+    private void selectGroupToAdd(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+    }
+
     private void initContactModification(ContactData contact) {
         click(By.xpath(String.format("//input[@value='%s']/ancestor::tr/td[8]/a", contact.getId())));
     }
 
     private void submitContactModification() {
         click(By.name("update"));
+    }
+
+    private void submitGroupAddingToContact() {
+        click(By.name("add"));
     }
 
     private void selectAllContacts() {
@@ -85,6 +143,10 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("home"));
     }
 
+    private void attachPhoto(ContactData contact) {
+        attach(By.name("photo"), contact.getPhoto());
+    }
+
     private void fillForm(ContactData contact) {
         click(By.name("firstname"));
         fillField(By.name("firstname"), contact.getFirstName());
@@ -106,7 +168,6 @@ public class ContactHelper extends HelperBase {
         fillField(By.name("email2"), contact.getSecondEmail());
         click(By.name("email3"));
         fillField(By.name("email3"), contact.getThirdEmail());
-        attach(By.name("photo"), contact.getPhoto());
     }
 
     public List<ContactData> getList() {

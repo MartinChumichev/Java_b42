@@ -2,6 +2,7 @@ package tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.CommonFunctions;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,17 +17,18 @@ import java.util.List;
 public class GroupCreationTests extends TestBase {
 
     @ParameterizedTest
-    @MethodSource("groupProvider")
-    void carCreateMultiplyGroups(GroupData group) {
-        List<GroupData> oldGroups = app.groups().getList();
-        app.groups().createGroup(group);
-        List<GroupData> newGroups = app.groups().getList();
+    @MethodSource("singleRandomGroup")
+    void canCreateGroup(GroupData group) {
+        List<GroupData> oldGroups = app.hbm().getGroupList();
+        app.hbm().createGroup(group);
+        List<GroupData> newGroups = app.hbm().getGroupList();
         Comparator<GroupData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newGroups.sort(compareById);
+        var maxId = newGroups.get(newGroups.size() - 1).id();
         List<GroupData> expectedList = new ArrayList<>(oldGroups);
-        expectedList.add(group.withId(newGroups.get(newGroups.size() - 1).id()).withHeader("").withFooter(""));
+        expectedList.add(group.withId(maxId));
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
     }
@@ -34,9 +36,9 @@ public class GroupCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("negativeGroupProvider")
     void carNotCreateGroups(GroupData group) {
-        List<GroupData> oldGroups = app.groups().getList();
+        List<GroupData> oldGroups = app.hbm().getGroupList();
         app.groups().createGroup(group);
-        List<GroupData> newGroups = app.groups().getList();
+        List<GroupData> newGroups = app.hbm().getGroupList();
         Assertions.assertEquals(oldGroups, newGroups);
     }
 
@@ -54,6 +56,13 @@ public class GroupCreationTests extends TestBase {
         });
         list.addAll(value);
         return list;
+    }
+
+    public static List<GroupData> singleRandomGroup() {
+        return List.of(new GroupData()
+               .withName(CommonFunctions.randomString(9))
+               .withFooter(CommonFunctions.randomString(8))
+               .withHeader(CommonFunctions.randomString(7)));
     }
 
     public static List<GroupData> negativeGroupProvider() {

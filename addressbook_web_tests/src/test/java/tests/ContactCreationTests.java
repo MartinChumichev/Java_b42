@@ -2,7 +2,9 @@ package tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.CommonFunctions;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,11 +19,11 @@ import java.util.List;
 public class ContactCreationTests extends TestBase {
 
     @ParameterizedTest
-    @MethodSource("contactProvider")
+    @MethodSource("singleRandomContact")
     void canCreateContact(ContactData contact) {
-        List<ContactData> oldContacts = app.contacts().getList();
+        List<ContactData> oldContacts = app.hbm().getContactList();
         app.contacts().createContact(contact);
-        List<ContactData> newContacts = app.contacts().getList();
+        List<ContactData> newContacts = app.hbm().getContactList();
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.getId()), Integer.parseInt(o2.getId()));
         };
@@ -38,16 +40,29 @@ public class ContactCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("negativeContactProvider")
     void canNotCreateContacts(ContactData contact) {
-        List<ContactData> oldContacts = app.contacts().getList();
+        List<ContactData> oldContacts = app.hbm().getContactList();
         app.contacts().createContact(contact);
-        List<ContactData> newContacts = app.contacts().getList();
+        List<ContactData> newContacts = app.hbm().getContactList();
         Assertions.assertEquals(oldContacts, newContacts);
     }
 
     @Test
     void createContactWithPhoto() {
         ContactData contact = new ContactData().contactWithPhoto(randomFile("src/test/resources/images/"));
-        app.contacts().createContact(contact);
+        app.contacts().createContactWithPhoto(contact);
+    }
+
+    @Test
+    void canCreateContactInGroup() {
+        ContactData contact = new ContactData().contactWithNames("", "name", "lname");
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "Group name", "Group header", "Group footer"));
+        }
+        GroupData group = app.hbm().getGroupList().get(0);
+        List<ContactData> oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().createContact(contact, group);
+        List<ContactData> newRelated = app.hbm().getContactsInGroup(group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
 
     public static List<ContactData> contactProvider() throws IOException {
@@ -62,6 +77,13 @@ public class ContactCreationTests extends TestBase {
         });
         list.addAll(value);
         return list;
+    }
+
+    public static List<ContactData> singleRandomContact() {
+        return List.of(new ContactData()
+               .contactWithNames("",
+                      CommonFunctions.randomString(9),
+                      CommonFunctions.randomString(9)));
     }
 
     public static List<ContactData> negativeContactProvider() {
