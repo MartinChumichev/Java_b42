@@ -13,28 +13,30 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class ContactCreationTests extends TestBase {
 
     @ParameterizedTest
-    @MethodSource("singleRandomContact")
+    @MethodSource("randomContacts")
     void canCreateContact(ContactData contact) {
         List<ContactData> oldContacts = app.hbm().getContactList();
         app.contacts().createContact(contact);
         List<ContactData> newContacts = app.hbm().getContactList();
-        Comparator<ContactData> compareById = (o1, o2) -> {
-            return Integer.compare(Integer.parseInt(o1.getId()), Integer.parseInt(o2.getId()));
-        };
-        newContacts.sort(compareById);
+
+        var extraContact = newContacts.stream().filter(c -> !newContacts.contains(c)).toList();
+        var newId = extraContact.get(0).getId();
+
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
         expectedList.add(contact.contactWithNames(
-               newContacts.get(newContacts.size() - 1).getId(),
+               newId,
                contact.getFirstName(),
                contact.getLastName()));
-        expectedList.sort(compareById);
-        Assertions.assertEquals(newContacts, expectedList);
+
+        Assertions.assertEquals(Set.copyOf(newContacts), Set.copyOf(expectedList));
     }
 
     @ParameterizedTest
@@ -79,11 +81,13 @@ public class ContactCreationTests extends TestBase {
         return list;
     }
 
-    public static List<ContactData> singleRandomContact() {
-        return List.of(new ContactData()
-               .contactWithNames("",
-                      CommonFunctions.randomString(9),
-                      CommonFunctions.randomString(9)));
+    public static Stream<ContactData> randomContacts() {
+        Supplier<ContactData> randomContactData = () ->
+               new ContactData()
+                      .contactWithNames("",
+                             CommonFunctions.randomString(9),
+                             CommonFunctions.randomString(9));
+        return Stream.generate(randomContactData).limit(2);
     }
 
     public static List<ContactData> negativeContactProvider() {

@@ -11,8 +11,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class GroupCreationTests extends TestBase {
 
@@ -22,15 +24,14 @@ public class GroupCreationTests extends TestBase {
         List<GroupData> oldGroups = app.hbm().getGroupList();
         app.hbm().createGroup(group);
         List<GroupData> newGroups = app.hbm().getGroupList();
-        Comparator<GroupData> compareById = (o1, o2) -> {
-            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
-        };
-        newGroups.sort(compareById);
-        var maxId = newGroups.get(newGroups.size() - 1).id();
+
+        var extraGroup = newGroups.stream().filter(g -> !oldGroups.contains(g)).toList();
+        var newId = extraGroup.get(0).id();
+
         List<GroupData> expectedList = new ArrayList<>(oldGroups);
-        expectedList.add(group.withId(maxId));
-        expectedList.sort(compareById);
-        Assertions.assertEquals(newGroups, expectedList);
+        expectedList.add(group.withId(newId));
+
+        Assertions.assertEquals(Set.copyOf(newGroups), Set.copyOf(expectedList));
     }
 
     @ParameterizedTest
@@ -58,11 +59,13 @@ public class GroupCreationTests extends TestBase {
         return list;
     }
 
-    public static List<GroupData> singleRandomGroup() {
-        return List.of(new GroupData()
-               .withName(CommonFunctions.randomString(9))
-               .withFooter(CommonFunctions.randomString(8))
-               .withHeader(CommonFunctions.randomString(7)));
+    public static Stream<GroupData> singleRandomGroup() {
+        Supplier<GroupData> randomGroupData = () ->
+               new GroupData()
+                      .withName(CommonFunctions.randomString(9))
+                      .withFooter(CommonFunctions.randomString(8))
+                      .withHeader(CommonFunctions.randomString(7));
+        return Stream.generate(randomGroupData).limit(2);
     }
 
     public static List<GroupData> negativeGroupProvider() {

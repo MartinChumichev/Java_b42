@@ -4,8 +4,8 @@ import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupHelper extends HelperBase {
 
@@ -45,10 +45,9 @@ public class GroupHelper extends HelperBase {
     }
 
     private void selectAllGroups() {
-        List<WebElement> checkboxes = manager.driver.findElements(By.name("selected[]"));
-        for (WebElement checkbox : checkboxes) {
-            checkbox.click();
-        }
+        manager.driver
+               .findElements(By.name("selected[]"))
+               .forEach(WebElement::click);
     }
 
     public int getCount() {
@@ -101,13 +100,12 @@ public class GroupHelper extends HelperBase {
 
     public List<GroupData> getList() {
         openGroupPage();
-        List<GroupData> groups = new ArrayList<>();
         List<WebElement> spans = manager.driver.findElements(By.xpath("//span[@class='group']"));
-        for (var span : spans) {
-            var name = span.getText();
-            var id = span.findElement(By.name("selected[]")).getAttribute("value");
-            groups.add(new GroupData().withId(id).withName(name));
-        }
-        return groups;
+        return spans.stream().map(span -> {
+                   var name = span.getText();
+                   var id = span.findElement(By.name("selected[]")).getAttribute("value");
+                   return new GroupData().withId(id).withName(name);
+               })
+               .collect(Collectors.toList());
     }
 }

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class ContactModificationTests extends TestBase {
 
@@ -29,11 +29,7 @@ public class ContactModificationTests extends TestBase {
         List<ContactData> newContacts = app.hbm().getContactList();
         List<ContactData> expectedList = new ArrayList<>(oldContacts);
         expectedList.set(index, testData.contactWithNames(oldContacts.get(index).getId(), testData.getFirstName(), testData.getLastName()));
-        Comparator<ContactData> compareById = (o1, o2) -> {
-            return Integer.compare(Integer.parseInt(o1.getId()), Integer.parseInt(o2.getId()));
-        };
-        newContacts.sort(compareById);
-        expectedList.sort(compareById);
-        Assertions.assertEquals(newContacts, expectedList);
+
+        Assertions.assertEquals(Set.copyOf(newContacts), Set.copyOf(expectedList));
     }
 }
